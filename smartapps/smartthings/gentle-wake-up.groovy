@@ -130,6 +130,20 @@ private initialize() {
 	subscribe(app, appHandler)
 
 	subscribe(location, locationHandler)
+
+    if (dimmers) {
+        subscribe(dimmers, "switch", switchHandler)
+    }
+}
+
+def switchHandler(evt) {
+    log.debug "switchHandler evt: ${evt.value}"
+    log.debug "switchHandler source: ${evt.source}"
+    log.debug "switchHandler isPhysical(): ${evt.isPhysical()}"
+    if (evt.value == "off" && evt.isPhysical()) {
+        log.debug "Switch was turned off, stopping cycle"
+        completion()
+    }
 }
 
 def appHandler(evt) {
